@@ -30,9 +30,10 @@ function handleSubmit() {
 
 <template>
 <section>
-    <h2>Add Transaction </h2>
+    <div class="form-column">
+    
     <form @submit.prevent="handleSubmit" class="form-outline" method="POST">
-
+      <h2>Add Transaction </h2>
       <div class="field">
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" min="0.01" step="0.01" placeholder="0.00" v-model="amount">
@@ -61,10 +62,38 @@ function handleSubmit() {
 
       <button type="submit" class="submit">Add Transaction</button>
     </form>
+    </div>
+
+    <div class="preview-column">
+      <div class="preview-card">
+        <p class="preview-label"> Preview </p>
+        <p class="preview-category"> {{ category }}</p>
+        <p :class="['preview-amount', type === 'Income' ? 'income' : 'expenses']">
+          GH₵ {{ amount || '0.00' }}
+        </p>
+        <p class="preview-date">{{ date || 'No date selected' }}</p>
+      </div>
+    </div>
 </section>
 </template>
 
 <style scoped>
+
+section {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+h2 {
+  align-items: center;
+  text-align: center;
+}
+
+.form-column, .preview-column {
+  flex: 1;
+  min-width: 250px;
+}
 .form-outline {
     max-width: 450px;
     width: 100%;
@@ -106,5 +135,44 @@ function handleSubmit() {
     transition: background-color 0.3s ease, transform 0.1s ease;
     border: none;
     outline: none;
+}
+
+.preview-card {
+  background-color: var(--navy);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  width: 70%;
+}
+
+.preview-label {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.preview-category {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.preview-amount {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.preview-amount.income {
+  color: var(--emerald);
+}
+
+.preview-amount.expenses {
+  color: var(--red);
+}
+
+.preview-date {
+  font-size: 13px;
+  opacity: 0.7;
 }
 </style>

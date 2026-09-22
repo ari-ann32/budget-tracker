@@ -22,6 +22,8 @@ watch([category, type, fromDate, toDate], () => {
 
 <template>
 <section class="filter">
+
+      <div class="lala">
       <label for="category">Category:</label>
       <select id="category" v-model="category" name="selected_category">
           <option v-for="c  in categories" :key="c" :value="c">{{ c }}</option>
@@ -39,18 +41,17 @@ watch([category, type, fromDate, toDate], () => {
 
       <label for="to-date">To Date:</label>
       <input type="date" id="to-date" v-model="toDate" name="day">
+      </div>
 </section>
 </template>
 
 <style scoped>
 section {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(1, 2fr);
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     padding: 20px;
     border: 2px solid var(--white);
     border-radius: 8px;
@@ -59,3 +60,4 @@ section {
     box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
 }
 </style>
+ 

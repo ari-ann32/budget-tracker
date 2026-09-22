@@ -9,15 +9,18 @@
 
 <style scoped>
 footer {
-    background-color: var(--navy);
-    color: var(--white);
-    padding: 40px 20px 20px 20px;
+    background-color: var(--white);
+    color: var(--navy);
+    padding: 20px;
     font-size: 14px;
-    max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-rows: 1fr auto;
+    left: 0;
+    right: 0;
+    width: 100%;
     text-align: center;
     align-items: center;
+    box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
+    border-top: 2px solid var(--white)
 }
+   
 </style>

@@ -17,11 +17,14 @@ defineProps(['transactions'])
         <tr v-for="(t, index) in transactions" :key="index">
           <td>{{ t.date }}</td>
           <td>{{ t.category }}</td>
-          <td :class="t.type === 'Income' ? 'income' : 'expense'">{{ t.type }}</td>
-          <td class="amount">GH₵ {{ t.amount.toFixed(2) }}</td>
+          <td><span :class="['pill', t.type === 'Income' ? 'pill-income' : 'pill-expense']">{{ t.type }} </span> </td>
+          <td>
+             GH₵ {{ t.amount.toFixed(2) }}
+          </td>
         </tr>
         
       </table>
+
 </section>
 </template>
 
@@ -29,6 +32,7 @@ defineProps(['transactions'])
 section {
   padding-top: 60px;
   padding-bottom: 60px;
+  text-transform: capitalize;
 }
 .transaction-table {
     width: 100%;
@@ -36,6 +40,7 @@ section {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background-color: var(--white);
     
 }
 
@@ -54,19 +59,24 @@ section {
     background-color: #f5f5f5;
 }
 
-.transaction-table .amount {
-    text-align: right;
+.pill {
+    display:inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
     font-weight: bold;
+    font-size: 14px;
+    text-transform: capitalize;
 }
 
-.transaction-table .income {
+.pill-income {
+    background-color: #e6f7ee;
     color: var(--emerald);
-    font-weight: bold;
 }
 
-.transaction-table .expenses {
+.pill-expense {
+    background-color: #fdecea;
     color: var(--red);
-    font-weight: bold;
 }
+
 
 </style>

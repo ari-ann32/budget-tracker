@@ -29,7 +29,7 @@ const filteredTransactions = computed(() => {
     const matchesCategory =
     filters.value.category === 'All' || t.category === filters.value.category
     const matchesType =
-    filters.value.type === 'all' || t.type === filters.value.type
+    filters.value.type === 'All' || t.type === filters.value.type
     const matchesFrom =
     !filters.value.fromDate || t.date >= filters.value.fromDate
     const matchesTo =

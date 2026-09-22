@@ -1,4 +1,21 @@
 <script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['transactions'])
+
+const totalIncome = computed(() =>
+  props.transactions
+    .filter((t) =>t.type === 'income')
+    .reduce((sum,t) => sum + t.amount,0)
+    )
+
+const totalExpenses = computed(() =>
+  props.transactions
+    .filter((t) => t.type === 'expenses')
+    .reduce((sum,t) => sum + t.amount, 0)
+    )
+
+const balance = computed(() => totalIncome.value - totalExpenses.value)
 </script>
 
 <template>
@@ -8,17 +25,17 @@
  
       <div class="block">
         <label><h1>Total Income</h1></label>
-        <div id="currency" class="placeholder-text"><h1>GH₵ 0.00</h1></div>
+        <div id="currency" class="placeholder-text"><h1>GH₵ {{ totalIncome.toFixed(2) }}</h1></div>
       </div>
 
       <div class="block">
         <label><h1>Total Expenses</h1></label>
-        <div id="currency" class="placeholder-text"><h1>GH₵ 0.00</h1></div>
+        <div id="currency" class="placeholder-text"><h1>GH₵ {{ totalExpenses.toFixed(2) }}</h1></div>
       </div>
 
       <div class="block">
         <label><h1>Current Balance</h1></label>
-        <div id="currency" class="placeholder-text"><h1>GH₵ 0.00</h1></div>
+        <div id="currency" class="placeholder-text"><h1>GH₵ {{ balance.toFixed(2) }}</h1></div>
       </div>
 
     </div>

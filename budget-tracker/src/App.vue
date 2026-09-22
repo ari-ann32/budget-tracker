@@ -27,7 +27,15 @@ function updateFilters(newFilters) {
 const filteredTransactions = computed(() => {
   return transactions.value.filter((t) => {
     const matchesCategory =
-    filters.value
+    filters.value.category === 'All' || t.category === filters.value.category
+    const matchesType =
+    filters.value.type === 'all' || t.type === filters.value.type
+    const matchesFrom =
+    !filters.value.fromDate || t.date >= filters.value.fromDate
+    const matchesTo =
+    !filters.value.toDate || t.date <= filters.value.toDate
+
+    return matchesCategory && matchesType && matchesFrom && matchesTo
   })
 })
 </script>
@@ -35,10 +43,10 @@ const filteredTransactions = computed(() => {
 <template>
   <div class="container">
   <Header/>
-  <Summary/>
-  <TransactionForm/>
-  <FilterBar/>
-  <TransactionTable/>
+  <Summary :transactions="transactions"/>
+  <TransactionForm @add-transaction="addTransaction"/>
+  <FilterBar @update-filters="updateFilters"/>
+  <TransactionTable :transactions="filteredTransactions"/>
   <Footer/>
 </div>
 </template>

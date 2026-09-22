@@ -1,4 +1,5 @@
 <script setup>
+defineProps(['transactions'])
 </script>
 
 <template>
@@ -7,33 +8,19 @@
       <table class="transaction-table">
 
         <tr>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Type</th>
           <th>Date</th>
+          <th>Category</th>
+          <th>Type</th>
+          <th>Amount</th>
         </tr>
 
-        <tr>
-          <td>Transport</td>
-          <td class="amount">40.00</td>
-          <td class="expenses">Expenses</td>
-          <td>11/05/2026</td>
+        <tr v-for="(t, index) in transactions" :key="index">
+          <td>{{ t.date }}</td>
+          <td>{{ t.category }}</td>
+          <td :class="t.type === 'Income' ? 'income' : 'expense'">{{ t.type }}</td>
+          <td class="amount">GH₵ {{ t.amount.toFixed(2) }}</td>
         </tr>
-
-        <tr>
-          <td>Food</td>
-          <td class="amount">40.00</td>
-          <td class="expenses">Expenses</td>
-          <td>11/05/2026</td>
-        </tr>
-
-        <tr>
-          <td>Allowance</td>
-          <td class="amount">500.00</td>
-          <td class="income">Income</td>
-          <td>11/05/2026</td>
-        </tr>
-
+        
       </table>
 </section>
 </template>

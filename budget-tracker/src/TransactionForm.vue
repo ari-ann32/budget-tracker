@@ -1,46 +1,65 @@
 <script setup>
+import { ref } from 'vue';
+
+const emit = defineEmits(['add-transaction'])
+
+const amount = ref('')
+const category = ref('')
+const type = ref('')
+const date = ref('')
+
+const categories = ['Food', 'Transport', 'Data', 'Airtime', 'Books', 'Recreation', 'Allowance', 'Gift', 'Salary']
+
+function handleSubmit() {
+  if (!amount.value || !date.value) return
+
+  emit('add-transaction', {
+    amount: parseFloat(amount.value),
+    category: category.value,
+    type: type.value,
+    date: date.value
+  })
+
+  amount.value = ''
+  date.value = ''
+  category.value = ''
+  type.value = ''
+}
+
 </script>
 
 <template>
 <section>
-    <form class="form-outline" method="POST">
+    <h2>Add Transaction </h2>
+    <form @submit.prevent="handleSubmit" class="form-outline" method="POST">
 
       <div class="field">
         <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" min="0.01" step="0.01" placeholder="0.00">
+        <input type="number" id="amount" name="amount" min="0.01" step="0.01" placeholder="0.00" v-model="amount">
       </div>
 
       <div class="field">
         <label for="category">Choose a category:</label>
-        <select id="category" name="selected_category">
-          <option value="">--Select an option</option>
-          <option value="food">Food</option>
-          <option value="transport">Transport</option>
-          <option value="data">Data</option>
-          <option value="airtime">Airtime</option>
-          <option value="books">Books</option>
-          <option value="recreation">Recreation</option>
-          <option value="allowance">Allowance</option>
-          <option value="gift">Gift</option>
-          <option value="salary">Salary</option>
+        <select id="category" v-model="category "name="selected_category">
+          <option v-for="c in categories" :key="c" :value="c"> {{ c }}</option>
         </select>
       </div>
       
       <div class="field">
          <label for="type">Choose a type:</label>
-         <select id="type" name="selected_type">
+         <select id="type" v-model="type" name="selected_type">
           <option value="">--Select an option</option>
           <option value="income">Income</option>
-          <option value="expense">Expense</option>
+          <option value="expenses">Expenses</option>
          </select>
       </div>
 
       <div class="field">
         <label for="transaction-date">Date:</label>
-        <input type="date" id="transaction-date" name="day">
+        <input type="date" v-model="date" id="transaction-date" name="day">
       </div>
 
-      <button type="submit" class="submit">Submit</button>
+      <button type="submit" class="submit">Add Transaction</button>
     </form>
 </section>
 </template>

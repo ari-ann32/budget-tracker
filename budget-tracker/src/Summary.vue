@@ -13,29 +13,35 @@ const totalExpenses = computed(() =>
   props.transactions
     .filter((t) => t.type === 'expenses')
     .reduce((sum,t) => sum + t.amount, 0)
-    )
+)
+  const transactionCount = computed(() => props.transactions.length)
+   
 
 const balance = computed(() => totalIncome.value - totalExpenses.value)
 </script>
 
 <template>
-<section>
-
-    <div class="summary">
+<section class="summary">
+  
+  <div class="balance">
+    <p class="balance-text">CURRENT BALANCE</p>
+    <div class="cb-values">
+    <p class="balance-currency">GH₵  </p>
+    <p class="balance-value">{{  balance.toFixed(2) }}</p>
+    </div> 
+    <p class="transactioncount-text">{{ transactionCount }} transaction{{ transactionCount == 1 ? '' : 's' }} recorded</p>
+    </div>
+  
+    <div class="remaining">
  
       <div class="income-block">
-        <label><h1>Total Income</h1></label>
-        <div id="income-currency" class="placeholder-text"><h1>GH₵ {{ totalIncome.toFixed(2) }}</h1></div>
+        <p class="remaining-text">TOTAL INCOME</p>
+        <diV class="currency-value">GH₵ {{ totalIncome.toFixed(2) }}</div>
       </div>
 
       <div class="expenses-block">
-        <label><h1>Total Expenses</h1></label>
-        <div id="expenses-currency" class="placeholder-text"><h1>GH₵ {{ totalExpenses.toFixed(2) }}</h1></div>
-      </div>
-
-      <div class="balance-block">
-        <label><h1>Current Balance</h1></label>
-        <div id="balance-currency" class="placeholder-text"><h1>GH₵ {{ balance.toFixed(2) }}</h1></div>
+        <p class="remaining-text">TOTAL EXPENSES</p>
+        <div class="currency-value">GH₵ {{ totalExpenses.toFixed(2) }}</div>
       </div>
 
     </div>
@@ -48,58 +54,100 @@ const balance = computed(() => totalIncome.value - totalExpenses.value)
 
 .summary {
     display: flex;
-    width: 800px;
-    margin: 0 auto;
     padding: 20px;
     gap: 16px;
-    height: 50vh;
-    position:sticky;
-    top: 0;
+    height: 40vh;
     margin-bottom: 24px;
-    box-sizing: border-box;
+    position: sticky;
 }
 
-.income-block, .expenses-block, .balance-block {
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-    height: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.balance {
+    width: 70%;
     overflow: hidden;
     word-break: break-word;
     border-radius: 12px;
-    text-align: center;
+    height: 250px;
+    justify-content: space-between;
+    text-align: left;
+    background-color: var(--ink);
+    padding: 20px;
     box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }
 
-.block label {
-  font-size: 14px;
-  margin-bottom: 8px;
-  opacity: 0.85;
+.balance-text, .transactioncount-text, .balance-currency {
+  color: var(--ink-muted);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.1em;
 }
 
-#income-currency, #expenses-currency, #balance-currency {
-  font-size: clamp(16px, 4w, 26px);
-  font-weight: bold;
+.balance-text {
+  margin: 0px;
+  margin-left: 8px;
 }
 
-.income-block {
-  background-color: #e6f7ee;
-  border: 2px solid #e6f7ee;
+.transactioncount-text {
+  margin-top: 4px;
 }
+.cb-values {
+  display: flex;
+  align-items: baseline;
+  
+}
+
+.balance-value {
+  color: var(--surface);
+  font-family: 'Newsreader', serif;
+  font-weight: 500;
+  font-size: 60px;
+}
+
+.remaining {
+    width: 30%;
+    height: 250px;
+    display: grid;
+    gap: 16px;
+    position: sticky;
+}
+
+.income-block, .expenses-block {
+  overflow: hidden;
+  word-break: break-word;
+  border-radius: 12px;
+  height: 117px;
+  justify-content: space-between;
+  text-align: left;
+  background-color: var(--surface);
+  box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.remaining-text {
+  color: var(--ink-muted);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  padding-bottom: 30px;
+}
+
+.currency-value {
+  font-family: 'Newsreader', serif;
+  font-size: 27px;
+  font-weight: 500;
+}
+
+
+
 
 #income-currency {
   color: var(--emerald);
 }
 
-.expenses-block {
-  background-color: #fdecea;
-  border: 2px solid #fdecea;
-}
+
 
 #expenses-currency {
   color: var(--red);

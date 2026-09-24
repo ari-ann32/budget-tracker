@@ -1,19 +1,24 @@
 :root {
-    --navy: #1b2a4a;
-    --white: #f8f9fa;
-    --emerald: #2ecc71;
-    --red: #ff0000;
+    --paper: #f6f3ec;
+    --surface: #fdfcf9;
+    --inset: #f0ebe0;
+    --line: #e4dfd4;
+    --field-line: #d9d2c4;
+    --ink: #1c1b18;
+    --ink-soft: #57534a;
+    --ink-muted: #6f6a5f;
+    --income: #2d6a4f;
+    --expense: #a03e2b;
 }
 
+@import url('https://googleapis.com');
+
 * {
-    margin: 0;
-    padding: 0;
     box-sizing:border-box;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--white);
-    color: var(--navy);
+    background-color: var(--paper);
+    color: var(--ink);
 }
 

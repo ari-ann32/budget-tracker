@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import Header from './Header.vue'
 import Summary from './Summary.vue'
 import TransactionForm from './TransactionForm.vue'
@@ -8,6 +8,16 @@ import TransactionTable from './TransactionTable.vue'
 import Footer from './Footer.vue'
 
 const transactions = ref([])
+onMounted(() => {
+  const saved = localStorage.getItem('budget-transactions')
+  if (saved) {
+    transactions.value = JSON.parse(saved)
+  }
+})
+
+watch(transactions, (newValue) => {
+  localStorage.setItem('budget-transactions', JSON.stringify(newValue))
+}, {deep: true })
 
 const filters = ref({
   category: 'All',

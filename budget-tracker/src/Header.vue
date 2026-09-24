@@ -3,35 +3,47 @@
 
 <template>
     <header>
-        <span>💰</span>
+      <span>💰</span>
       <h1>My Budget Tracker</h1>
+      <p>All amounts in Ghana cedi (GH₵)</p>
     </header>
 </template>
 
 <style scoped>
 header{
-    height: 20vh;
+    height: 10vh;
     align-items: center;
-    text-align: left;
     display: flex;
+    background-color: var(--surface);
     gap: 12px;
     flex-direction: row;
-    justify-content: left;
     margin-bottom: 60px;
-    padding: 20px 0;
-    border-bottom: 2px solid var(--white);
+    padding: 50px;
+    border-bottom: 2px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
 }
 
 span {
-    font-size: 30px;
+    font-size: 25px;
 }
 
-header h1 {
-    font-size: 30px;
-    color:var(--navy);
+h1 {
+    font-size: 25px;
     font-weight: bold;
 }
+
+p {
+    padding-left: 900px;
+    color: var(--ink-muted);
+}
 </style>
+
+
+
+
+
+
+
+
+
+

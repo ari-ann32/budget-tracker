@@ -33,30 +33,30 @@ function handleSubmit() {
     <div class="form-column">
     
     <form @submit.prevent="handleSubmit" class="form-outline" method="POST">
-      <h2>Add Transaction </h2>
+      <h2>Add a Transaction </h2>
       <div class="field">
-        <label for="amount">Amount:</label>
+        <label for="amount">Amount</label>
         <input type="number" id="amount" name="amount" min="0.01" step="0.01" placeholder="0.00" v-model="amount">
       </div>
 
       <div class="field">
-        <label for="category">Choose a category:</label>
+        <label for="category">Category</label>
         <select id="category" v-model="category "name="selected_category">
           <option v-for="c in categories" :key="c" :value="c"> {{ c }}</option>
         </select>
       </div>
       
       <div class="field">
-         <label for="type">Choose a type:</label>
+         <label for="type">Type</label>
          <select id="type" v-model="type" name="selected_type">
           <option value="">--Select an option</option>
-          <option value="income">Income</option>
-          <option value="expenses">Expenses</option>
+          <option value="Income">Income</option>
+          <option value="Expenses">Expenses</option>
          </select>
       </div>
 
       <div class="field">
-        <label for="transaction-date">Date:</label>
+        <label for="transaction-date">Date</label>
         <input type="date" v-model="date" id="transaction-date" name="day">
       </div>
 
@@ -86,28 +86,33 @@ section {
 }
 
 h2 {
-  align-items: center;
-  text-align: center;
+  text-align: left;
+  font-family: 'Newsreader', serif;
+  font-weight: 600;
+  font-size: 25px;
 }
 
-.form-column, .preview-column {
+.form-column {
   flex: 1;
   min-width: 250px;
+  padding-right: 280px;
 }
 .form-outline {
-    max-width: 450px;
+    max-width: 550px;
     width: 100%;
     margin: 0 auto;
-    padding: 30px;
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom: 60px;
+    margin-bottom: 60px; 
 }
 
-.form-outline label {
-    font-size: larger;
-    font-weight: 600;
+label {
+    font-family: 'IBM Plex Sans', serif;
+    font-size: 19px;
+    font-weight: 550;
+    color: var(--ink-soft);
 }
+
 .field {
     display: flex;
     flex-direction: column;
@@ -115,15 +120,24 @@ h2 {
     margin-bottom: 20px;
 }
 
-.form-outline input[type="number"], .form-outline select, .form-outline, .form-outline input[type="date"] {
+input {
+  border-color: ;
+}
+
+.form-outline {
     width:100%;
     padding: 12px 16px;
-    font-size: large;
     border: 1px #cccccc;
     border-radius: 6px;
     box-sizing: border-box;
 }
 
+input, select {
+  border-radius: 8px;
+  border-color: var(--field-line);
+  font-size: large;
+  padding: 12px 16px;
+}
 .form-outline button {
     background-color: var(--navy);
     color: var(--white);
@@ -174,5 +188,9 @@ h2 {
 .preview-date {
   font-size: 13px;
   opacity: 0.7;
+}
+.preview-column {
+  flex: 1;
+  min-width: 250px;
 }
 </style>

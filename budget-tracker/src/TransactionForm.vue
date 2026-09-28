@@ -7,11 +7,20 @@ const amount = ref('')
 const category = ref('')
 const type = ref('')
 const date = ref('')
+const error = ref('')
 
 const categories = ['Food', 'Transport', 'Data', 'Airtime', 'Books', 'Recreation', 'Allowance', 'Gift', 'Salary']
 
 function handleSubmit() {
-  if (!amount.value || !date.value) return
+  if (!amount.value || parseFloat(amount.value) <= 0) {
+    error.value = 'Enter an amount greater than zero'    
+   return
+  }
+
+  if (!date.value || !category.value) 
+    return
+  
+    error.value = ''
 
   emit('add-transaction', {
     amount: parseFloat(amount.value),
@@ -36,23 +45,29 @@ function handleSubmit() {
       <h2>Add a Transaction </h2>
       <div class="field">
         <label for="amount">Amount</label>
-        <input type="number" id="amount" name="amount" min="0.01" step="0.01" placeholder="0.00" v-model="amount">
+        <input type="number" id="amount" v-model="amount" step="0.01" placeholder="0.00"
+        :class="{'field-error': error}">
+        <p v-if="error" class="error-message">{{ error }}</p>
       </div>
 
       <div class="field">
         <label for="category">Category</label>
         <select id="category" v-model="category "name="selected_category">
+          <option value="">--Select an option</option>
           <option v-for="c in categories" :key="c" :value="c"> {{ c }}</option>
         </select>
       </div>
       
       <div class="field">
          <label for="type">Type</label>
-         <select id="type" v-model="type" name="selected_type">
-          <option value="">--Select an option</option>
-          <option value="Income">Income</option>
-          <option value="Expenses">Expenses</option>
-         </select>
+         <label :class="['toggle-option', { active: type === 'Income'}]">
+         <input type="radio" v-model="type" value="Income">
+         <span class="dot income-dot"></span>Income
+         </label>
+         <label :class="['toggle-option', { active: type === 'Expenses'}]">
+         <input type="radio" v-model="type" value="Expenses">
+         <span class="dot expenses-dot"></span>Expenses
+         </label>
       </div>
 
       <div class="field">
@@ -60,29 +75,30 @@ function handleSubmit() {
         <input type="date" v-model="date" id="transaction-date" name="day">
       </div>
 
-      <button type="submit" class="submit">Add Transaction</button>
+      <div class="preview-card" v-if="amount">
+        <span class="body-text">You are adding</span>
+        <span class="amount-figure" :class="type === 'Income' ? 'income-text' : 'expense-text'">
+          {{ type === 'Income' ? '+' : '-' }} GH₵ {{ parseFloat(amount|| 0).toFixed(2) }}
+        </span>
+      </div>
+      <div class="preview placeholder body-text" v-else>
+        Fill in the form to see a preview here
+      </div>
+        
+      <button type="submit" class="submit-btn">Add Transaction</button>
     </form>
     </div>
 
-    <div class="preview-column">
-      <div class="preview-card">
-        <p class="preview-label"> Preview </p>
-        <p class="preview-category"> {{ category }}</p>
-        <p :class="['preview-amount', type === 'Income' ? 'income' : 'expenses']">
-          GH₵ {{ amount || '0.00' }}
-        </p>
-        <p class="preview-date">{{ date || 'No date selected' }}</p>
-      </div>
-    </div>
 </section>
 </template>
 
 <style scoped>
 
 section {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px;
 }
 
 h2 {
@@ -90,6 +106,7 @@ h2 {
   font-family: 'Newsreader', serif;
   font-weight: 600;
   font-size: 25px;
+  margin-bottom: 20px;
 }
 
 .form-column {
@@ -111,6 +128,9 @@ label {
     font-size: 19px;
     font-weight: 550;
     color: var(--ink-soft);
+    display: block;
+    margin-bottom: 4px;
+    margin-top: 16px;
 }
 
 .field {
@@ -118,10 +138,6 @@ label {
     flex-direction: column;
     gap: 8px;
     margin-bottom: 20px;
-}
-
-input {
-  border-color: ;
 }
 
 .form-outline {
@@ -134,63 +150,113 @@ input {
 
 input, select {
   border-radius: 8px;
-  border-color: var(--field-line);
+  border: 1px solid var(--field-line);
   font-size: large;
-  padding: 12px 16px;
-}
-.form-outline button {
-    background-color: var(--navy);
-    color: var(--white);
-    padding: 12px 16px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    border: none;
-    outline: none;
+  padding: 16px;
+  width: 100%;
 }
 
-.preview-card {
-  background-color: var(--navy);
-  color: var(--white);
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  width: 70%;
+input:focus, select:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
 }
 
-.preview-label {
-  font-size: 13px;
-  opacity: 0.7;
-  margin-bottom: 8px;
+.field-error {
+  border-color: var(--expense);
 }
 
-.preview-category {
-  font-size: 16px;
-  margin-bottom: 6px;
+.error-message {
+  color: var(--expense);
+  font-size: 12px;
+  margin-top: 4px;
 }
 
-.preview-amount {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 6px;
+.type-toggle {
+  display: flex;
+  gap: 8px;
 }
 
-.preview-amount.income {
-  color: var(--emerald);
-}
-
-.preview-amount.expenses {
-  color: var(--red);
-}
-
-.preview-date {
-  font-size: 13px;
-  opacity: 0.7;
-}
-.preview-column {
+.toggle-option {
   flex: 1;
-  min-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 46px;
+  border: 1px solid var(--field-line);
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
 }
+
+.toggle-option.input {
+ position: absolute;
+ opacity: 0;
+ width: 0;
+ height: 0;
+}
+
+.toggle-option.active {
+  background-color: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.income-dot {
+  background-color: var(--income);
+}
+.expenses-dot {
+  background-color: var(--expense);
+}
+
+.preview {
+  margin-top: 20px;
+  background-color: var(--inset);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview.placeholder {
+  color: var(--ink-muted);
+  justify-content: flex-start;
+}
+
+.income-text {
+  color: var(--income);
+}
+.expense-text {
+  color: var(--expense);
+}
+.submit-btn {
+    background-color: var(--ink);
+    color: var(--surface);
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    height: 48px;
+    margin-top: 16px;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+.submit-btn:disabled {
+    background-color: var(--line);
+    color: var(--ink-muted);
+    cursor: not-allowed;
+}
+
 </style>

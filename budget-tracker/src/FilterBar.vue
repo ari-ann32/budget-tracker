@@ -18,46 +18,89 @@ watch([category, type, fromDate, toDate], () => {
         toDate: toDate.value
     })
 })
+
+function clearFilters() {
+    category.value = 'All'
+    type.value = 'All'
+    fromDate.value = ''
+    toDate.value = ''
+}
 </script>
 
 <template>
-<section class="filter">
+<section class>
 
-      <div class="lala">
-      <label for="category">Category:</label>
-      <select id="category" v-model="category" name="selected_category">
-          <option v-for="c  in categories" :key="c" :value="c">{{ c }}</option>
+      <div class="filter-bar">
+      <div class="filter-item">
+      <label>Category</label>
+      <select v-model="category">
+          <option v-for="c  in categories" :key="c" :value="c">{{ c === 'All' ? 'All Categories' : c }}</option>
       </select>
+      </div>
 
-      <label for="type">Type:</label>
-      <select id="type" v-model="type" name="selected_type">
-          <option value="all">All</option>
+      <div class="filter-item">
+      <label>Type</label>
+      <select v-model="type">
+          <option value="all">Income and expenses</option>
           <option value="income">Income</option>
           <option value="expenses">Expenses</option>
       </select>
+      </div>
 
-      <label for="from-date">From Date:</label>
-      <input type="date" id="from-date" v-model="fromDate "name="day">
+      <div class="filter-item">
+      <label>From</label>
+      <input type="date" v-model="fromDate"/>
+      </div>
+      
+      <div class="filter-item">
+      <label>To</label>
+      <input type="date" v-model="toDate"/>
+      </div>
 
-      <label for="to-date">To Date:</label>
-      <input type="date" id="to-date" v-model="toDate" name="day">
+      <button class="clear-btn" @click="clearFilters">Clear Filters</button>
       </div>
 </section>
 </template>
 
 <style scoped>
-section {
-    display: grid;
-    grid-template-columns: repeat(1, 2fr);
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-    border: 2px solid var(--white);
-    border-radius: 8px;
-    text-align: center;
-    font-size: large;
-    box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1);
+.filter-bar {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 16px;
+   align-items: flex-end;
+   background-color: var(--surface);
+   border: 1px solid var(--line);
+   border-radius: 16px;
+   padding: 16px 20px;
+   margin-bottom: 16px;
+}
+
+.filter-item {
+   display: flex;
+   flex-direction: column;
+   min-width: 140px;
+}
+
+label {
+    margin-bottom: 4px;
+}
+
+select, input {
+    height: 46px;
+    padding: 8px;
+    border: 1px solid var(--field-line);
+    border-radius: 10px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+}
+
+.clear-btn {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    color: var(--ink);
+    cursor: pointer;
+    height: 44px;
 }
 </style>
  

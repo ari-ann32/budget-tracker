@@ -13,12 +13,15 @@
 
 @import url('https://googleapis.com');
 
-* {
+* { 
     box-sizing:border-box;
 }
 
 body {
     background-color: var(--paper);
     color: var(--ink);
+    font-size: 15px;
 }
+
+
 

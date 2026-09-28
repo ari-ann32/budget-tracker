@@ -4,20 +4,13 @@ import { computed } from 'vue'
 const props = defineProps(['transactions'])
 
 const totalIncome = computed(() =>
-  props.transactions
-    .filter((t) =>t.type === 'income')
-    .reduce((sum,t) => sum + t.amount,0)
-    )
-
-const totalExpenses = computed(() =>
-  props.transactions
-    .filter((t) => t.type === 'expenses')
-    .reduce((sum,t) => sum + t.amount, 0)
+  props.transactions.filter((t) =>t.type === 'Income').reduce((sum,t) => sum + t.amount,0)
 )
-  const transactionCount = computed(() => props.transactions.length)
-   
-
+const totalExpenses = computed(() =>
+  props.transactions.filter((t) => t.type === 'Expense').reduce((sum,t) => sum + t.amount, 0)
+)
 const balance = computed(() => totalIncome.value - totalExpenses.value)
+const transactionCount = computed(() => props.transactions.length)
 </script>
 
 <template>

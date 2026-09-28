@@ -1,82 +1,143 @@
 <script setup>
-defineProps(['transactions'])
+import {computed} from 'vue'
+
+const props =defineProps(['transactions'])
+const emit = defineEmits(['delete-transaction'])
+
+const netTotal = computed(() =>
+  props.transactions.reduce((sum,t) => sum + (t.type === 'Income' ? t.amount : -t.amount), 0)
+)
+
 </script>
 
 <template>
 <section class="transactions">
-      <h2>Transactions</h2>
       <table class="transaction-table">
-
+        <thead>
         <tr>
           <th>Date</th>
           <th>Category</th>
           <th>Type</th>
           <th>Amount</th>
+          <th></th>
         </tr>
+        </thead>
 
+        <tbody v-if="transactions.length">
         <tr v-for="(t, index) in transactions" :key="index">
           <td>{{ t.date }}</td>
           <td>{{ t.category }}</td>
-          <td><span :class="['pill', t.type === 'Income' ? 'pill-income' : 'pill-expense']">{{ t.type }} </span> </td>
           <td>
-             GH₵ {{ t.amount.toFixed(2) }}
+            <span :class="['pill', t.type === 'Income' ? 'pill-income' : 'pill-expense']">
+              {{t.type}}
+            </span> 
+          </td>
+          <td :class="t.type === 'Income' ? 'income-text' : 'expense-text'">
+            {{ t.type === 'Income' ? '+' : '-' }} {{ t.amount.toFixed(2) }}
+          </td>
+          <td class="align-right">
+            <button class="delete-btn" @click="emit('delete-transaction', index)">🗑</button>
           </td>
         </tr>
-        
+        </tbody>
       </table>
 
+      <div v-if="!transactions.length" class="empty-state">
+        <p class="section-heading"> No transactions yet</p>
+        <p class="body-text ink-muted">Record your first income or expense using the form on the left. Your balance and totals update the moment you save it.</p>
+      </div>
+
+      <div v-else class="table-footer">
+        <span> Showing {{ transactions.length }} of {{ transactions.length }} transactions</span>
+        <span> Net for this range <strong class="amount-figure"> GH₵ {{ netTotal.toFixed(2) }}</strong></span>
+      </div>
 </section>
 </template>
 
 <style scoped>
 section {
-  padding-top: 60px;
-  padding-bottom: 60px;
-  text-transform: capitalize;
-}
-.transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    background-color: var(--white);
-    
 }
 
-.transaction-table th, .transaction-table td {
-    padding: 12px 16px;
-    text-align: left;
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.transaction-table th {
-    background-color: var(--navy);
-    color: var(--white);
-    font-weight: 600;
+th{
+  background-color: var(--inset);
+  text-align: left;
+  padding: 16px 20px;
 }
 
-.transaction-table tr:nth-child(even) {
-    background-color: #f5f5f5;
+td {
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.align-right {
+  text-align: right;
+}
+
+.income-text {
+  color: var(--income);
+}
+
+.expense-text {
+  color: var(--expense);
 }
 
 .pill {
-    display:inline-block;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-weight: bold;
-    font-size: 14px;
-    text-transform: capitalize;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .pill-income {
-    background-color: #e6f7ee;
-    color: var(--emerald);
+  background-color: var(--income-tint);
+  color: var(--income);
 }
 
 .pill-expense {
-    background-color: #fdecea;
-    color: var(--red);
+  background-color: var(--expense-tint);
+  color: var(--expense);
 }
 
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  opacity: 0.5;
+  font-size: 20px;
+}
 
+.delete-btn:hover {
+  opacity: 1;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1 px solid var(--line);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+}
+
+.empty-state .body-text {
+  max-width: 320px;
+  margin: 8px auto 0;
+}
 </style>

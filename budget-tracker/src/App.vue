@@ -9,6 +9,7 @@ import Footer from './Footer.vue'
 
 const transactions = ref([])
 const filters = ref({ category: 'All', type: 'All', fromDate: '', toDate: '' })
+const showMobileForm = ref(false)
 
 onMounted(() => {
   const saved = localStorage.getItem('budget-transactions')
@@ -17,10 +18,11 @@ onMounted(() => {
 
 watch(transactions, (newValue) => {
   localStorage.setItem('budget-transactions', JSON.stringify(newValue))
-}, {deep: true })
+}, { deep: true })
 
 function addTransaction(newTransaction) {
   transactions.value.push(newTransaction)
+  showMobileForm.value = false
 }
 
 function deleteTransaction(index) {
@@ -45,41 +47,110 @@ const filteredTransactions = computed(() =>
 <template>
   <div>
     <Header/>
-  <div class="container">
-    <Summary :transactions="transactions"/>
-    <div class="main-grid">
-      <TransactionForm @add-transaction="addTransaction"/>
-      <div class="table-column">
-        <FilterBar @update-filters="updateFilters"/>
-        <TransactionTable :transactions="filteredTransactions" @delete-transaction="deleteTransaction"/>
+    <div class="container">
+      <Summary :transactions="transactions"/>
+      <div class="main-grid">
+        <div class="desktop-form">
+          <TransactionForm @add-transaction="addTransaction"/>
+        </div>
+        <div class="table-column">
+          <FilterBar @update-filters="updateFilters"/>
+          <TransactionTable :transactions="filteredTransactions" @delete-transaction="deleteTransaction"/>
+        </div>
+      </div>
+    </div>
+    <Footer/>
+
+    <button class="mobile-fab" @click="showMobileForm = true">
+      + Add transaction
+    </button>
+
+    
+    <div v-if="showMobileForm" class="mobile-form-overlay">
+      <div class="mobile-form-header">
+        <button class="back-btn" @click="showMobileForm = false">← Back</button>
+      </div>
+      <div class="mobile-form-body">
+        <TransactionForm @add-transaction="addTransaction"/>
       </div>
     </div>
   </div>
-  <Footer/>
-</div>
 </template>
 
 <style scoped>
+@media (min-width: 800px) {
 .main-grid {
   display: flex;
   gap: 20px;
   align-items: flex-start;
   flex-wrap: wrap;
+  padding: 0px  50px;
 }
 
 .main-grid > :first-child {
   flex: 1;
-  min-width: 280px;
 }
 
 .table-column {
-  flex: 2;
-  min-width: 320px;
+  flex: 3;
+}
+}
+.mobile-fab {
+  display: none;
 }
 
-@media (max-width: 700px) {
-  .main-grid {
-    flex-direction: column;
+.mobile-form-overlay {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .desktop-form {
+    display: none;
+  }
+  .mobile-fab {
+    display: block;
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    height: 55px;
+    background-color: var(--ink);
+    color: var(--surface);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 20;
+  }
+  .mobile-form-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--paper);
+    z-index: 30;
+    overflow-y: auto;
+  }
+
+  .mobile-form-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+    background-color: var(--surface);
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .mobile-form-body {
+    padding: 16px;
   }
 }
 </style>
